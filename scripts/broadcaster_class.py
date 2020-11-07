@@ -26,10 +26,12 @@ class Broadcaster:
         self.listener = tf2_ros.TransformListener(self.tfBuffer)
 
         # Subscribers
-        rospy.Subscriber("/ar_pose_marker", numpy_msg(AlvarMarkers), self.Marker_Callback, queue_size=10 )
+        rospy.Subscriber(   "/ar_pose_marker", 
+                            numpy_msg(AlvarMarkers), 
+                            self.Marker_Callback, queue_size=10 )
 
 
-    #--------------------------------------------------------------------------------------#
+    #------------------------------------------------------------------------------------#
     # Callback o interrupcion
     def Marker_Callback(self, marker_info):
 
@@ -39,8 +41,12 @@ class Broadcaster:
         # MTH from base to camera
         
         try:
-            trans_mobbase_cam = self.tfBuffer.lookup_transform("base_footprint", "camera_depth_frame", rospy.Time())
-        except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
+            trans_mobbase_cam = self.tfBuffer.lookup_transform( "base_footprint",
+                                                                "camera_depth_frame", 
+                                                                rospy.Time())
+        except (tf2_ros.LookupException, 
+                tf2_ros.ConnectivityException, 
+                tf2_ros.ExtrapolationException):
             rospy.logwarn("Error trying to look for transform")
             return 
 
@@ -97,8 +103,12 @@ class Broadcaster:
 
         # Transform obtained from ROS
         try:
-            trans_base_marker = self.tfBuffer.lookup_transform("base_footprint", "ar_marker_5", rospy.Time())
-        except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
+            trans_base_marker = self.tfBuffer.lookup_transform("base_footprint", 
+                                                                "ar_marker_5", 
+                                                                rospy.Time())
+        except (tf2_ros.LookupException, 
+                tf2_ros.ConnectivityException, 
+                tf2_ros.ExtrapolationException):
             rospy.logwarn("Error trying to look for transform")
             return 
         quat_from_ROS = np.array([trans_base_marker.transform.rotation.x, \
